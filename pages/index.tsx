@@ -1,22 +1,24 @@
 import { useState, useEffect, FormEvent } from 'react';
  
 export default function Page() {
+  const [matchList, setMatchList] = useState([])
+  const [newMatch, setNewMatch] = useState([])
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
  
-    const formData = new FormData(event.currentTarget)
+    // const formData = new FormData(event.currentTarget)
+
     const response = await fetch('/api/submit', {
       method: 'POST',
-      body: formData,
+      body: newMatch,
     })
  
     // Handle response if necessary
     const data = await response.json()
-    console.log(data)
+    setMatchList(data)
   }
  
-  const [matchList, setMatchList] = useState([])
-  
   useEffect(() => {
     fetch('/api/matches')
       .then((res) => res.json())
@@ -25,16 +27,24 @@ export default function Page() {
       })
   }, [])
 
+  const handleInputChange = (event) => {
+    setNewMatch(event.target.value);
+  };
+
   return (
     <div>
       <div className="new-match-form">
+        Add new match:
         <form onSubmit={onSubmit}>
-          <input type="text" name="name" />
+          <input type="text" name="name" onChange={handleInputChange} />
           <button type="submit">Submit</button>
         </form>
       </div>
       <div className="match-list">
-        {RenderMatchList(matchList)}
+        Current list of matches:
+        <ul>
+          {RenderMatchList(matchList)}
+        </ul>
       </div>
     </div>
   )

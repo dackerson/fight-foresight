@@ -6,8 +6,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const matchesStr = fs.readFileSync('./db.json', 
+  var matchesStr = fs.readFileSync('./db.json', 
       'utf-8').toString();
+  if (!matchesStr) {
+    matchesStr = '[]'
+  }
   const matches = JSON.parse(matchesStr)
   console.log(matches)
   res.status(200).json(matches)

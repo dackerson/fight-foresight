@@ -6,13 +6,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const currentDataStr = fs.readFileSync('./db.json', 'utf-8', handleError)
+  var currentDataStr = fs.readFileSync('./db.json', 'utf-8', handleError)
   console.log("current data: ")
   console.log(currentDataStr)
+  if (!currentDataStr) {
+    currentDataStr = "[]"
+  }
   const currentData = JSON.parse(currentDataStr)
 
-  console.log("req: " + req)
-  console.log("req.body: " + req.body)
+  // console.log("req: " + req)
+  // console.log("req.body: " + req.body)
+  // console.log("req.body[\"name\"]: " + req.body["name"])
+  // for (const [key, value] of req.body) {
+    // console.log(`${key}: ${value}\n`);
+  // }
+
   const newData = [...currentData, {title: req.body}]
   const newDataStr = JSON.stringify(newData)
 
